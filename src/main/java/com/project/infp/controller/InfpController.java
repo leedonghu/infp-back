@@ -23,6 +23,7 @@ public class InfpController {
     @ResponseBody
     @RequestMapping(value = "/music/{name}", method = RequestMethod.GET)
     public List<Music> musicName(@PathVariable("name") String name){
+        System.out.println("check");
         List<Music> title = musicRankService.serachMusic(name);
 
         return title;

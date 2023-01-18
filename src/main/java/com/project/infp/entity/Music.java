@@ -9,6 +9,7 @@ public class Music {
     private Long id;
     private String title;
     private String artist;
+    private String img;
 
 
     /**
@@ -52,6 +53,21 @@ public class Music {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+
+    /**
+     * @return String return the img
+     */
+    public String getImg() {
+        return img;
+    }
+
+    /**
+     * @param img the img to set
+     */
+    public void setImg(String img) {
+        this.img = img;
     }
 
 }
