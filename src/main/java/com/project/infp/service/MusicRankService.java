@@ -8,6 +8,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 
 import com.project.infp.entity.Music;
@@ -17,20 +22,21 @@ public class MusicRankService {
     
     public List<Music> serachMusic(String name){
         String url = "https://vibe.naver.com/search/tracks?query=" + name;
-        System.out.println("check");
+        // System.out.println("check");
         
         Document doc = null;
         List<Music> musicList = new ArrayList<>();
         try {
             doc = Jsoup.connect(url).get();
-            System.out.println(doc.select("#app"));
+            System.out.println(doc.select("#app").select(".home"));
             Elements element = doc.select("#content > div > div.track_wrap > div.track_section > div:nth-child(2) > div > table > tbody");
             System.out.println(element.hasText());
             for(Element e : element.select("tr")){
+                System.out.println(e);
                 Music music = new Music();
-                music.setArtist(e.select("td.song > div.title_badge_wrap > span > a").text());
-                music.setTitle(e.select("td.song > div.artist_sub > span:nth-child(1) > span > a > span").text());
-                music.setImg(e.select("td.thumb > div > img").attr("src"));
+                music.setArtist(e.select("td.song > div.artist_sub > span > span > a > span").text());
+                music.setTitle(e.select("td.song > div.title_badge_wrap > span > a").text());
+                music.setImg(e.select("a.img_thumb").attr("src"));
                 musicList.add(music);
             }
         } catch (Exception e) {
@@ -38,11 +44,48 @@ public class MusicRankService {
             e.printStackTrace();
         }
 
-        for(Music m : musicList){
-            System.out.println(m.getArtist());
-        }
         
-        
+        // System.setProperty("webdriver.chrome.driver", "C:\\myworkspace\\java\\infp-back\\chromedriver_win32\\chromedriver.exe");
+        // ChromeOptions options = new ChromeOptions();
+        // options.addArguments("headless");
+        // WebDriver driver = new ChromeDriver(options);
+        // try {
+        //     driver.get(url);
+        //     Thread.sleep(1000);
+        //     WebElement element= driver.findElement(By.id("app"));
+        //     List<WebElement> elements = driver.findElements(By.tagName("tr"));
+        //     List<WebElement> elements2 = driver.findElements(By.className("img_thumb"));
+        //     for(WebElement e : elements2){
+        //         System.out.println(e.getAttribute("src"));
+        //     } 
+        //     WebElement test = element.findElement(By.cssSelector("#content > div > div.track_wrap > div.track_section > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td.song > div.title_badge_wrap > span > a"));
+        //     System.out.println(test.getText());
+            
+            // for(WebElement e : elements){
+            //     Music music = new Music();
+            //     WebElement e1 = e.findElement(By.cssSelector("td.thumb > div > img"));
+            //     music.setImg(e1.getAttribute("src"));
+
+            //     WebElement e2 = e.findElement(By.cssSelector("td.song > div.title_badge_wrap > span > a"));
+            //     music.setTitle(e2.getText());
+
+            //     WebElement e3 = e.findElement(By.cssSelector("td.song > div.artist_sub > span:nth-child(1) > span > a > span"));
+            //     music.setArtist(e3.getText());
+
+            //     musicList.add(music);
+                
+            // }
+            
+            // } catch (Exception e) {
+                //     // TODO: handle exception
+                //     e.printStackTrace();
+                // }
+                
+                // driver.close();
+                // driver.quit();
+                for(Music m : musicList){
+                    System.out.println(m.getArtist());
+                }
 
         return musicList;
     }
