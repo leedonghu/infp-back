@@ -21,22 +21,21 @@ import com.project.infp.entity.Music;
 public class MusicRankService {
     
     public List<Music> serachMusic(String name){
-        String url = "https://vibe.naver.com/search/tracks?query=" + name;
+        String url = "https://www.melon.com/search/song/index.htm?q=" + name;
         // System.out.println("check");
         
         Document doc = null;
         List<Music> musicList = new ArrayList<>();
         try {
             doc = Jsoup.connect(url).get();
-            System.out.println(doc.select("#app").select(".home"));
-            Elements element = doc.select("#content > div > div.track_wrap > div.track_section > div:nth-child(2) > div > table > tbody");
-            System.out.println(element.hasText());
+            
+            Elements element = doc.select("tbody");
+            
             for(Element e : element.select("tr")){
-                System.out.println(e);
+                
                 Music music = new Music();
-                music.setArtist(e.select("td.song > div.artist_sub > span > span > a > span").text());
-                music.setTitle(e.select("td.song > div.title_badge_wrap > span > a").text());
-                music.setImg(e.select("a.img_thumb").attr("src"));
+                music.setArtist(e.select("div#artistName > a.fc_mgray").text());
+                music.setTitle(e.select("a.fc_gray").text());
                 musicList.add(music);
             }
         } catch (Exception e) {
@@ -83,9 +82,7 @@ public class MusicRankService {
                 
                 // driver.close();
                 // driver.quit();
-                for(Music m : musicList){
-                    System.out.println(m.getArtist());
-                }
+                
 
         return musicList;
     }
